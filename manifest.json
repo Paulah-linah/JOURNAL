@@ -2,14 +2,14 @@
   "name": "Our Date Journal",
   "short_name": "Date Journal",
   "description": "A romantic date planner, memory book, and budget tracker for couples.",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#fdfbf7",
   "theme_color": "#ff4d61",
   "icons": [
     {
-      "src": "/love-icon.svg",
+      "src": "./love-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

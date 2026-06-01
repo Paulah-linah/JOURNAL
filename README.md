@@ -24,3 +24,7 @@ View your app in AI Studio: https://ai.studio/apps/e90cc170-7cc7-47d5-a718-e292c
 1. Double-click [`run-app.bat`](run-app.bat)
 2. Keep the window open while the dev server is running
 3. Open the local URL shown in the terminal, usually `http://localhost:3000`
+
+### GitHub Pages
+
+This repo now includes a GitHub Actions workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) that builds the Vite app and deploys the `dist` folder to GitHub Pages on every push to `main`.

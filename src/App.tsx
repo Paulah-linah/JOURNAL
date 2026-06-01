@@ -12,8 +12,50 @@ import BudgetAnalytics from './components/BudgetAnalytics';
 import DateForm from './components/DateForm';
 import DateCard from './components/DateCard';
 
+const STORAGE_KEY = 'our-date-journal-entries';
+
+function mergeStoredEntries(storedEntries: DateEntry[]): DateEntry[] {
+  const storedById = new Map(storedEntries.map((entry) => [entry.id, entry]));
+  const sampleIds = new Set(SAMPLE_DATES.map((entry) => entry.id));
+
+  const refreshedSamples = SAMPLE_DATES.map((sampleEntry) => {
+    const storedEntry = storedById.get(sampleEntry.id);
+    if (!storedEntry) {
+      return sampleEntry;
+    }
+
+    return {
+      ...sampleEntry,
+      completed: storedEntry.completed,
+    };
+  });
+
+  const customEntries = storedEntries.filter((entry) => !sampleIds.has(entry.id));
+
+  return [...refreshedSamples, ...customEntries];
+}
+
+function loadEntriesFromStorage(): DateEntry[] {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(SAMPLE_DATES));
+    return SAMPLE_DATES;
+  }
+
+  try {
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed)) {
+      return mergeStoredEntries(parsed);
+    }
+  } catch (error) {
+    console.error('Failed to parse stored entries', error);
+  }
+
+  return SAMPLE_DATES;
+}
+
 export default function App() {
-  const [entries, setEntries] = useState<DateEntry[]>([]);
+  const [entries, setEntries] = useState<DateEntry[]>(() => loadEntriesFromStorage());
   const [activeTab, setActiveTab] = useState<'active' | 'history' | 'analytics'>('active');
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
 
@@ -24,25 +66,31 @@ export default function App() {
 
   // Load from local storage or set defaults on initial mount
   useEffect(() => {
-    const stored = localStorage.getItem('our-date-journal-entries');
-    if (stored) {
-      try {
-        setEntries(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse entries from localStorage', e);
-        setEntries(SAMPLE_DATES);
+    const syncFromStorage = () => {
+      setEntries(loadEntriesFromStorage());
+    };
+
+    syncFromStorage();
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === STORAGE_KEY) {
+        syncFromStorage();
       }
-    } else {
-      // Pre-seed with gorgeous sample couples outings
-      setEntries(SAMPLE_DATES);
-      localStorage.setItem('our-date-journal-entries', JSON.stringify(SAMPLE_DATES));
-    }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('focus', syncFromStorage);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('focus', syncFromStorage);
+    };
   }, []);
 
   // Save to local storage whenever state changes
   const saveToStorage = (newEntries: DateEntry[]) => {
     setEntries(newEntries);
-    localStorage.setItem('our-date-journal-entries', JSON.stringify(newEntries));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
   };
 
   // Add a new entry

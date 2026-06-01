@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom romantic brand colors */
+  --color-rose-brand-50: #FFF5F6;
+  --color-rose-brand-100: #FFE6E9;
+  --color-rose-brand-200: #FFCCD2;
+  --color-rose-brand-300: #FFA4AF;
+  --color-rose-brand-400: #FF7382;
+  --color-rose-brand-500: #FF4D61;
+  --color-rose-brand-600: #E63548;
+  --color-rose-brand-700: #C22031;
+
+  --color-warm-beige-50: #FDFBF7;
+  --color-warm-beige-100: #FAF6EE;
+  --color-warm-beige-200: #F4ECE1;
+  --color-warm-beige-300: #E6D8C4;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-warm-beige-50);
+  color: #2D2727;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-warm-beige-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-rose-brand-200);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rose-brand-300);
+}
+

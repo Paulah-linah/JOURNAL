@@ -1,0 +1,10 @@
+{
+  "name": "Our Date Journal",
+  "description": "A modern, romantic, and responsive date planner, memory book, and budget tracker for couples.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
